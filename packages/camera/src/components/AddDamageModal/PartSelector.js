@@ -68,7 +68,7 @@ export default function PartSelector({ orientation, togglePart, isPartSelected, 
     if (Platform.OS === 'web') {
       svg = doc.children[0];
     } else {
-      svg = doc.childNodes[1];
+      svg = doc.childNodes[1] ?? doc.childNodes[0];
     }
     if (svg.tagName !== 'svg') {
       throw new Error('Invalid part selector SVG format: expected <svg> tag as the first children of XML document');
