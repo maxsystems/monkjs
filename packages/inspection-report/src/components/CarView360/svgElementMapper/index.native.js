@@ -1,18 +1,24 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-
 import Svg, { Path, G } from 'react-native-svg';
-import CAR_PARTS from '../hooks/carParts';
 
-const SELECTED_FILL_COLOR = '#ADE0FFB3';
-const UNSELECTED_FILL_COLOR = 'none';
+import { CommonPropTypes } from '../../../resources';
+import CAR_PARTS from '../../../resources/carParts';
+import { useCustomSVGAttributes } from '../hooks';
 
 const jsxSpecialAttributes = {
   class: 'className',
 };
 
-export default function SVGComponentMapper({ element, togglePart, isPartSelected, groupName }) {
+export default function SVGElementMapper({
+  element,
+  damages,
+  groupId,
+  getPartAttributes,
+  onPressPart,
+  onPressPill,
+}) {
   function getAttribute(attributeElement, name) {
     for (let i = 0; i < attributeElement.attributes.length; i += 1) {
       if (attributeElement.attributes[i].name === name) {
@@ -34,18 +40,22 @@ export default function SVGComponentMapper({ element, togglePart, isPartSelected
   const elementClass = getAttribute(element, 'class');
   const elementId = getAttribute(element, 'id');
   let partKey = null;
-  if (groupName && CAR_PARTS.includes(groupName)) {
-    partKey = groupName;
+  if (groupId && CAR_PARTS.includes(groupId)) {
+    partKey = groupId;
   }
   if (elementClass && elementClass.includes('selectable') && CAR_PARTS.includes(elementId)) {
     partKey = elementId;
   }
 
-  const color = isPartSelected(partKey) ? SELECTED_FILL_COLOR : UNSELECTED_FILL_COLOR;
-  const onPress = () => {
-    togglePart(partKey);
-  };
-
+  const customAttributes = useCustomSVGAttributes({
+    element,
+    groupId,
+    damages,
+    getPartAttributes,
+    onPressPart,
+    onPressPill,
+  });
+  const onPress = () => onPressPart(partKey);
   const elementChildren = [];
   if (element.childNodes) {
     for (let i = 0; i < element.childNodes.length; i += 1) {
@@ -53,7 +63,7 @@ export default function SVGComponentMapper({ element, togglePart, isPartSelected
     }
   }
   const children = useMemo(() => [...elementChildren], [element]);
-  const passThroughGroupName = useMemo(
+  const passThroughGroupId = useMemo(
     () => {
       if (element.tagName === 'g') {
         return elementId;
@@ -67,12 +77,14 @@ export default function SVGComponentMapper({ element, togglePart, isPartSelected
     return (
       <Svg {...attributes}>
         {children.map((child, id) => (
-          <SVGComponentMapper
+          <SVGElementMapper
             key={id.toString()}
             element={child}
-            togglePart={togglePart}
-            isPartSelected={isPartSelected}
-            groupName={passThroughGroupName}
+            groupId={passThroughGroupId ?? groupId}
+            damages={damages}
+            getPartAttributes={getPartAttributes}
+            onPressPart={onPressPart}
+            onPressPill={onPressPill}
           />
         ))}
         <Path style={{ fill: '#ffffff' }} />
@@ -80,14 +92,16 @@ export default function SVGComponentMapper({ element, togglePart, isPartSelected
     );
   } if (element.tagName === 'path') {
     return (
-      <Path {...attributes} onPress={partKey ? onPress : null} fill={color}>
+      <Path {...attributes} {...customAttributes} onPress={partKey ? onPress : null}>
         {children.map((child, id) => (
-          <SVGComponentMapper
+          <SVGElementMapper
             key={id.toString()}
             element={child}
-            togglePart={togglePart}
-            isPartSelected={isPartSelected}
-            groupName={passThroughGroupName}
+            groupId={passThroughGroupId ?? groupId}
+            damages={damages}
+            getPartAttributes={getPartAttributes}
+            onPressPart={onPressPart}
+            onPressPill={onPressPill}
           />
         ))}
         <Path style={{ fill: '#ffffff' }} />
@@ -95,14 +109,16 @@ export default function SVGComponentMapper({ element, togglePart, isPartSelected
     );
   } if (element.tagName === 'g') {
     return (
-      <G {...attributes} onPress={partKey ? onPress : null} fill={color}>
+      <G {...attributes} {...customAttributes} onPress={partKey ? onPress : null}>
         {children.map((child, id) => (
-          <SVGComponentMapper
+          <SVGElementMapper
             key={id.toString()}
             element={child}
-            togglePart={togglePart}
-            isPartSelected={isPartSelected}
-            groupName={passThroughGroupName}
+            groupId={passThroughGroupId ?? groupId}
+            damages={damages}
+            getPartAttributes={getPartAttributes}
+            onPressPart={onPressPart}
+            onPressPill={onPressPill}
           />
         ))}
         <Path style={{ fill: '#ffffff' }} />
@@ -112,13 +128,19 @@ export default function SVGComponentMapper({ element, togglePart, isPartSelected
   return null;
 }
 
-SVGComponentMapper.propTypes = {
+SVGElementMapper.propTypes = {
+  damages: PropTypes.arrayOf(CommonPropTypes.damage),
   element: PropTypes.any.isRequired,
-  groupName: PropTypes.string,
-  isPartSelected: PropTypes.func.isRequired,
-  togglePart: PropTypes.func.isRequired,
+  getPartAttributes: PropTypes.func,
+  groupId: PropTypes.string,
+  onPressPart: PropTypes.func,
+  onPressPill: PropTypes.func,
 };
 
-SVGComponentMapper.defaultProps = {
-  groupName: undefined,
+SVGElementMapper.defaultProps = {
+  damages: [],
+  getPartAttributes: () => {},
+  groupId: null,
+  onPressPart: () => {},
+  onPressPill: () => {},
 };

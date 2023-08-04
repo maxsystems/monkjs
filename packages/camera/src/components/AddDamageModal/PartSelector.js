@@ -1,10 +1,7 @@
 import { CarView360 } from '@monkvision/inspection-report';
 import React, { useCallback, useMemo } from 'react';
-import { StyleSheet, useWindowDimensions, View, Platform } from 'react-native';
+import { useWindowDimensions, Platform } from 'react-native';
 import PropTypes from 'prop-types';
-
-import { useWireframe, useXMLParser } from './hooks';
-import SVGComponentMapper from './svgComponentMapper';
 
 const PART_SELECTOR_CONTAINER_WIDTH = 420;
 const PART_SELECTOR_CONTAINER_HEIGHT_DIMENSION = [
@@ -13,9 +10,9 @@ const PART_SELECTOR_CONTAINER_HEIGHT_DIMENSION = [
   { screenHeightSpan: [310, 99999], partSelectorHeight: 235 },
 ];
 
-const selectedPartAttributes = {
+const selectedPartAttributes = (Platform.OS === 'web') ? {
   style: { fill: '#ADE0FFB3' },
-};
+} : { fill: '#ADE0FFB3' };
 
 export default function PartSelector({ orientation, togglePart, isPartSelected, vehicleType }) {
   const { height } = useWindowDimensions();
