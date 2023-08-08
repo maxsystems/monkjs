@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     paddingLeft: 16,
     paddingRight: 16,
-    top: 650,
+    top: 200,
   },
   horizontalBarContent: {
     display: 'flex',
@@ -162,7 +162,9 @@ export default function UpdateDamagePopUp({
           pan.setValue({ x: 0, y: bottomLimitY });
         } else {
           Animated.event(
-            [null, { moveX: pan.x, moveY: pan.y }],
+            [{ moveX: pan.x, moveY: pan.y }, {nativeEvent: {
+              contentOffset: { y: pan.y, x: pan.x },
+            }}],
             { useNativeDriver: Platform.OS !== 'web' },
           )(event, gestureStat);
         }
@@ -199,12 +201,16 @@ export default function UpdateDamagePopUp({
       <Animated.View style={[styles.animatedContainer, { 
         ...Platform.select({
           web: {
-            top: pan.y ,
+            top: pan.y,
           },
-        })}]}>
+          native: {
+            transform: [{ translateY: pan.y },]
+          }
+        })
+        }]}>
         <View
           style={[styles.horizontalBarContent]}
-          {...panResponder.panHandlers}
+          {...Platform.OS === 'web' ? {...panResponder.panHandlers} : {}}
         >
           <View style={[styles.horizontalBar]} />
         </View>

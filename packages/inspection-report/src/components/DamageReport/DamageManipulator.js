@@ -223,7 +223,10 @@ export default function DamageManipulator({
             {isEditable ? (
               <View style={[styles.severityContent]}>
                 <Slider
-                  style={{ marginRight: 15 }}
+                  style={{ marginRight: 15,
+                    ...Platform.select({
+                      native: { width: '95%' },
+                    })}}
                   minimumValue={0}
                   maximumValue={1500}
                   lowerLimit={0}

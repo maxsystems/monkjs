@@ -1,6 +1,6 @@
 import { Loader } from '@monkvision/ui';
 import PropTypes from 'prop-types';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -104,6 +104,7 @@ export default function DamageReport({
   generatePdf,
   pdfOptions,
   onStartNewInspection,
+  onPdfPressed
 }) {
   const { t } = useTranslation();
   const [currentTab, setCurrentTab] = useState(Tabs.OVERVIEW);
@@ -141,6 +142,7 @@ export default function DamageReport({
   });
 
   const {
+    reportUrl,
     pdfStatus,
     requestPdf,
     handleDownload,
@@ -151,6 +153,11 @@ export default function DamageReport({
     customer: pdfOptions?.customer,
     clientName: pdfOptions?.clientName,
   });
+
+  const handlePDFDownload = useCallback(() => {
+    handleDownload();
+    onPdfPressed(reportUrl);
+  })
 
   const {
     confirmModal,
@@ -181,7 +188,7 @@ export default function DamageReport({
         <Text style={[styles.text, styles.title]}>{t('damageReport.title')}</Text>
         <IconButton
           icon="file-download"
-          onPress={handleDownload}
+          onPress={handlePDFDownload}
           disabled={pdfStatus !== PdfStatus.READY}
           color={pdfIconColor}
           style={[styles.fileIcon, generatePdf ? {} : { opacity: 0 }]}
@@ -237,7 +244,7 @@ export default function DamageReport({
                 onPressPill={handlePillPressed}
                 generatePdf={generatePdf}
                 onValidateInspection={handleValidateInspection}
-                pdfHandles={{ pdfStatus, handleDownload }}
+                pdfHandles={{ pdfStatus, handleDownload: handlePDFDownload }}
                 onStartNewInspection={handleNewInspection}
               />
             )}
@@ -291,6 +298,7 @@ DamageReport.propTypes = {
   generatePdf: PropTypes.bool,
   inspectionId: PropTypes.string.isRequired,
   onStartNewInspection: PropTypes.func,
+  onPdfPressed: PropTypes.func,
   pdfOptions: PropTypes.shape({
     clientName: PropTypes.string.isRequired,
     customer: PropTypes.string.isRequired,
@@ -302,6 +310,7 @@ DamageReport.defaultProps = {
   damageMode: DamageMode.ALL,
   generatePdf: false,
   onStartNewInspection: () => {},
+  onPdfPressed: () => {},
   pdfOptions: undefined,
   vehicleType: VehicleType.CUV,
 };

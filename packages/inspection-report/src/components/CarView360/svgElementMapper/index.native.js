@@ -1,11 +1,12 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import Svg, { Path, G } from 'react-native-svg';
+import Svg, { Path, G, Circle, Text } from 'react-native-svg';
 
 import { CommonPropTypes } from '../../../resources';
 import CAR_PARTS from '../../../resources/carParts';
-import { useCustomSVGAttributes } from '../hooks';
+import { useCustomSVGAttributes, useInnerHTML } from '../hooks';
+import { getPillDamage } from '../hooks/common';
 
 const jsxSpecialAttributes = {
   class: 'className',
@@ -55,7 +56,17 @@ export default function SVGElementMapper({
     onPressPart,
     onPressPill,
   });
-  const onPress = () => onPressPart(partKey);
+  const innerHTML = useInnerHTML({ element, damages, groupId });
+  const { part } = getPillDamage({ damages, pillId: groupId });
+  const isPill = elementClass?.includes('damage-pill');
+
+  const onPress = () => {
+    if (isPill) {
+      onPressPill(part);
+    } else {
+      onPressPart(partKey);
+    }
+  };
   const elementChildren = [];
   if (element.childNodes) {
     for (let i = 0; i < element.childNodes.length; i += 1) {
@@ -92,7 +103,7 @@ export default function SVGElementMapper({
     );
   } if (element.tagName === 'path') {
     return (
-      <Path {...attributes} {...customAttributes} onPress={partKey ? onPress : null}>
+      <Path {...attributes} {...customAttributes} onPress={partKey || isPill ? onPress : null}>
         {children.map((child, id) => (
           <SVGElementMapper
             key={id.toString()}
@@ -109,7 +120,7 @@ export default function SVGElementMapper({
     );
   } if (element.tagName === 'g') {
     return (
-      <G {...attributes} {...customAttributes} onPress={partKey ? onPress : null}>
+      <G {...attributes} {...customAttributes} onPress={partKey || isPill ? onPress : null}>
         {children.map((child, id) => (
           <SVGElementMapper
             key={id.toString()}
@@ -123,6 +134,16 @@ export default function SVGElementMapper({
         ))}
         <Path style={{ fill: '#ffffff' }} />
       </G>
+    );
+  } if (element.tagName === 'circle') {
+    return (
+      <Circle {...attributes} {...customAttributes}></Circle>
+    );
+  }  if (element.tagName === 'text') {
+    return (
+      <Text {...attributes} {...customAttributes}>
+        {innerHTML}
+      </Text>
     );
   }
   return null;

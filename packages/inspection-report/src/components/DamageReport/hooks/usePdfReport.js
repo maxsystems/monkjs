@@ -96,7 +96,7 @@ export default function usePdfReport({
     download(reportUrl, inspectionId).catch((err) => {
       console.error('Error while downloading the PDF :', err);
     });
-  }, [reportUrl, inspectionId]);
+  }, [pdfStatus, reportUrl, inspectionId]);
 
   return {
     pdfStatus,
