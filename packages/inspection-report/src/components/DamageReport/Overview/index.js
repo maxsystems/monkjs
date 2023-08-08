@@ -23,7 +23,12 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'center'
+  },
+  overviewViewContainer: {
+    paddingVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   },
   buttonsContainer: {
     marginTop: 20,
@@ -67,7 +72,7 @@ export default function Overview({
   pdfHandles: { pdfStatus, handleDownload },
   onStartNewInspection,
 }) {
-  const { width } = useWindowDimensions();
+  const { width, height } = useWindowDimensions();
   const {
     orientation,
     rotateLeft,
@@ -101,7 +106,11 @@ export default function Overview({
     <View style={[styles.container]}>
       <DamageCounts damageMode={damageMode} counts={damageCounts} />
       <View style={[styles.carViewContainer]}>
-        <View style={[styles.carViewContainer]}>
+        <View style={[Platform.OS === 'web' ? styles.carViewContainer : styles.overviewViewContainer, {
+          ...Platform.select({
+            native: { width: width - 40, height: height / 2 },
+          })
+        }]}>
           <CarView360
             damages={damages}
             vehicleType={vehicleType}

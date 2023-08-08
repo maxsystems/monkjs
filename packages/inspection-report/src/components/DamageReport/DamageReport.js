@@ -254,7 +254,7 @@ export default function DamageReport({
               part={editedDamagePart}
               damage={editedDamage}
               damageMode={damageMode}
-              imageCount={editedDamageImages.length}
+              imageCount={(editedDamageImages ?? []).length }
               onDismiss={handlePopUpDismiss}
               onShowGallery={handleShowGallery}
               onConfirm={handleSaveDamage}

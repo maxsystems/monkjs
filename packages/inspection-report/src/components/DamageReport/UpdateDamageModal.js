@@ -56,7 +56,10 @@ const styles = StyleSheet.create({
   header: {
     color: '#fff',
     fontSize: 20,
-    fontWeight: 600,
+    ...Platform.select({
+      web: { fontWeight: 600 },
+      native: { fontWeight: '600' }
+    }),
     paddingVertical: 10,
   },
   carouselWrapper: {
@@ -95,7 +98,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     width: '100%',
-    maxWidth: '500px',
+    ...Platform.select({
+      web: { maxWidth: '500px' },
+    }),
     overflowY: 'scroll',
     paddingHorizontal: 20,
   },

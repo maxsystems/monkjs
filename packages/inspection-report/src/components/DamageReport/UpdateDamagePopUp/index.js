@@ -58,7 +58,9 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'center',
     width: '100%',
-    maxWidth: '500px',
+    ...Platform.select({
+      web: { maxWidth: '500px' },
+    }),
     position: 'relative',
     overflowY: 'scroll',
   },
@@ -194,7 +196,12 @@ export default function UpdateDamagePopUp({
         <View style={[styles.touchable]} />
       </TouchableWithoutFeedback>
 
-      <Animated.View style={[styles.animatedContainer, { top: pan.y }]}>
+      <Animated.View style={[styles.animatedContainer, { 
+        ...Platform.select({
+          web: {
+            top: pan.y ,
+          },
+        })}]}>
         <View
           style={[styles.horizontalBarContent]}
           {...panResponder.panHandlers}

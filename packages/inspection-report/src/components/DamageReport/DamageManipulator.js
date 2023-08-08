@@ -241,12 +241,13 @@ export default function DamageManipulator({
                   €
                 </Text>
               </View>
-            ) : (
+            ) : (<View>
               <Text style={[styles.text]}>
                 {editedDamage?.pricing ?? 0}
                 €
               </Text>
-            )}
+            </View>)
+          }
           </View>
         )
       }
