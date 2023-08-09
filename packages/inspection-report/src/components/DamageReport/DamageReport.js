@@ -104,7 +104,7 @@ export default function DamageReport({
   generatePdf,
   pdfOptions,
   onStartNewInspection,
-  onPdfPressed
+  onPdfPressed,
 }) {
   const { t } = useTranslation();
   const [currentTab, setCurrentTab] = useState(Tabs.OVERVIEW);
@@ -157,7 +157,7 @@ export default function DamageReport({
   const handlePDFDownload = useCallback(() => {
     handleDownload();
     onPdfPressed(reportUrl);
-  })
+  });
 
   const {
     confirmModal,
@@ -261,7 +261,7 @@ export default function DamageReport({
               part={editedDamagePart}
               damage={editedDamage}
               damageMode={damageMode}
-              imageCount={(editedDamageImages ?? []).length }
+              imageCount={(editedDamageImages ?? []).length}
               onDismiss={handlePopUpDismiss}
               onShowGallery={handleShowGallery}
               onConfirm={handleSaveDamage}
@@ -297,8 +297,8 @@ DamageReport.propTypes = {
   damageMode: CommonPropTypes.damageMode,
   generatePdf: PropTypes.bool,
   inspectionId: PropTypes.string.isRequired,
-  onStartNewInspection: PropTypes.func,
   onPdfPressed: PropTypes.func,
+  onStartNewInspection: PropTypes.func,
   pdfOptions: PropTypes.shape({
     clientName: PropTypes.string.isRequired,
     customer: PropTypes.string.isRequired,

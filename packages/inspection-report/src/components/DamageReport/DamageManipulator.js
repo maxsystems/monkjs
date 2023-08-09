@@ -3,7 +3,7 @@ import Slider from '@react-native-community/slider';
 import PropTypes from 'prop-types';
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 import { IconSeverity, SeveritiesWithIcon } from '../../assets';
 import { CommonPropTypes, DamageMode, DisplayMode, Severity, RepairOperation } from '../../resources';
 import { TextButton, SwitchButton } from '../common';
@@ -225,8 +225,8 @@ export default function DamageManipulator({
                 <Slider
                   style={{ marginRight: 15,
                     ...Platform.select({
-                      native: { width: '95%' },
-                    })}}
+                      native: { width: '85%' },
+                    }) }}
                   minimumValue={0}
                   maximumValue={1500}
                   lowerLimit={0}
@@ -244,13 +244,14 @@ export default function DamageManipulator({
                   €
                 </Text>
               </View>
-            ) : (<View>
-              <Text style={[styles.text]}>
-                {editedDamage?.pricing ?? 0}
-                €
-              </Text>
-            </View>)
-          }
+            ) : (
+              <View>
+                <Text style={[styles.text]}>
+                  {editedDamage?.pricing ?? 0}
+                  €
+                </Text>
+              </View>
+            )}
           </View>
         )
       }

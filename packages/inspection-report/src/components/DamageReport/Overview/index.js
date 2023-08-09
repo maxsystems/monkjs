@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
     alignSelf: 'stretch',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   overviewViewContainer: {
     paddingVertical: 20,
     alignItems: 'center',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
   },
   buttonsContainer: {
     marginTop: 20,
@@ -108,9 +108,10 @@ export default function Overview({
       <View style={[styles.carViewContainer]}>
         <View style={[Platform.OS === 'web' ? styles.carViewContainer : styles.overviewViewContainer, {
           ...Platform.select({
-            native: { width: width - 40, height: height / 2 },
-          })
-        }]}>
+            native: { width: width - 40, height: height / 3.0 },
+          }),
+        }]}
+        >
           <CarView360
             damages={damages}
             vehicleType={vehicleType}

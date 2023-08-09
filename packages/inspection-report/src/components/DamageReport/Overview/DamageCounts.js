@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   },
   severityCount: {
     ...Platform.select({
-      web: {fontWeight: 'medium'},
-      native: {fontWeight: 'normal'}
+      web: { fontWeight: 'medium' },
+      native: { fontWeight: 'normal' },
     }),
     fontSize: 12,
     color: '#FFFFFF',

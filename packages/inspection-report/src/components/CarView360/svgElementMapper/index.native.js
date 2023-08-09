@@ -137,9 +137,9 @@ export default function SVGElementMapper({
     );
   } if (element.tagName === 'circle') {
     return (
-      <Circle {...attributes} {...customAttributes}></Circle>
+      <Circle {...attributes} {...customAttributes} />
     );
-  }  if (element.tagName === 'text') {
+  } if (element.tagName === 'text') {
     return (
       <Text {...attributes} {...customAttributes}>
         {innerHTML}

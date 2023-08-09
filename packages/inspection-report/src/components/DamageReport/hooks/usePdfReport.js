@@ -99,6 +99,7 @@ export default function usePdfReport({
   }, [pdfStatus, reportUrl, inspectionId]);
 
   return {
+    reportUrl,
     pdfStatus,
     requestPdf,
     handleDownload,

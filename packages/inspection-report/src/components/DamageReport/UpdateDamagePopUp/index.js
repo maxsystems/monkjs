@@ -16,8 +16,6 @@ import { CommonPropTypes, DamageMode, DisplayMode } from '../../../resources';
 import ImageButton from './ImageButton';
 import DamageManipulator from '../DamageManipulator';
 
-const topLimitY = 145;
-
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
@@ -110,13 +108,14 @@ export default function UpdateDamagePopUp({
   const [viewMode, setViewMode] = useState(null);
   const [gestureState, setGestureState] = useState({});
   const pan = useRef(new Animated.ValueXY({ x: 0, y: bottomLimitY })).current;
+  const topLimitY = Platform.OS === 'web' ? 145 : -30;
 
   const handleToggleDamage = useCallback((isToggled) => {
     setViewMode(isToggled ? DisplayMode.FULL : DisplayMode.MINIMAL);
   }, []);
 
   const scrollIn = useCallback(() => {
-    const toValue = viewMode === DisplayMode.FULL ? topLimitY : bottomLimitY / 1.8;
+    const toValue = viewMode === DisplayMode.FULL ? topLimitY : bottomLimitY / (Platform.OS === 'web' ? 1.8 : 3.5);
     Animated.timing(pan, {
       toValue: { x: 0, y: toValue },
       duration: 200,
@@ -159,12 +158,12 @@ export default function UpdateDamagePopUp({
         if (gestureStat.moveY <= topLimitY) {
           pan.setValue({ x: 0, y: topLimitY });
         } else if (gestureStat.moveY >= bottomLimitY) {
-          pan.setValue({ x: 0, y: bottomLimitY });
+          pan.setValue({ x: 0, y: pan.y });
         } else {
           Animated.event(
-            [{ moveX: pan.x, moveY: pan.y }, {nativeEvent: {
+            [{ moveX: pan.x, moveY: pan.y }, { nativeEvent: {
               contentOffset: { y: pan.y, x: pan.x },
-            }}],
+            } }],
             { useNativeDriver: Platform.OS !== 'web' },
           )(event, gestureStat);
         }
@@ -176,7 +175,7 @@ export default function UpdateDamagePopUp({
   ).current;
 
   const topOffset = useMemo(
-    () => (viewMode === DisplayMode.FULL ? topLimitY : bottomLimitY / 1.8),
+    () => (viewMode === DisplayMode.FULL ? topLimitY : bottomLimitY / (Platform.OS === 'web' ? 1.8 : 3.5)),
     [viewMode, bottomLimitY],
   );
 
@@ -198,19 +197,20 @@ export default function UpdateDamagePopUp({
         <View style={[styles.touchable]} />
       </TouchableWithoutFeedback>
 
-      <Animated.View style={[styles.animatedContainer, { 
+      <Animated.View style={[styles.animatedContainer, {
         ...Platform.select({
           web: {
             top: pan.y,
           },
           native: {
-            transform: [{ translateY: pan.y },]
-          }
-        })
-        }]}>
+            transform: [{ translateY: topOffset }],
+          },
+        }),
+      }]}
+      >
         <View
           style={[styles.horizontalBarContent]}
-          {...Platform.OS === 'web' ? {...panResponder.panHandlers} : {}}
+          {...Platform.OS === 'web' ? { ...panResponder.panHandlers } : {}}
         >
           <View style={[styles.horizontalBar]} />
         </View>

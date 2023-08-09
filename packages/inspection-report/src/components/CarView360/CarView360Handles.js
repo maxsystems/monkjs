@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   selectedDot: {
     ...Platform.select({
       web: { transform: { scale: 1.5 } },
-      native: { transform: [{ scale: 1.5 }] }
+      native: { transform: [{ scale: 1.5 }] },
     }),
     backgroundColor: '#FFFFFF',
   },
