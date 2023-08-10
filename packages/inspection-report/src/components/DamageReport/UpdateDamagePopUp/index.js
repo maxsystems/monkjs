@@ -39,7 +39,10 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     paddingLeft: 16,
     paddingRight: 16,
-    top: 200,
+    ...Platform.select({
+      web: { top: 650, },
+      native: { top: 200, },
+    }),
   },
   horizontalBarContent: {
     display: 'flex',
