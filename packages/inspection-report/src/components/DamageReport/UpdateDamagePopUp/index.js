@@ -161,7 +161,7 @@ export default function UpdateDamagePopUp({
         if (gestureStat.moveY <= topLimitY) {
           pan.setValue({ x: 0, y: topLimitY });
         } else if (gestureStat.moveY >= bottomLimitY) {
-          pan.setValue({ x: 0, y: pan.y });
+          pan.setValue({ x: 0, y: bottomLimitY });
         } else {
           Animated.event(
             [{ moveX: pan.x, moveY: pan.y }, { nativeEvent: {
