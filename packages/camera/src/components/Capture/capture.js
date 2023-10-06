@@ -287,7 +287,9 @@ const Capture = forwardRef(({
     endTour,
   };
   const startUploadAsync = useStartUploadAsync(startUploadAsyncParams);
-  const uploadAdditionalDamage = useUploadAdditionalDamage({ inspectionId, addDamageParts, onPictureUploaded });
+  const uploadAdditionalDamage = useUploadAdditionalDamage({
+    inspectionId, addDamageParts, onPictureUploaded,
+  });
 
   const [goPrevSight, goNextSight] = useNavigationBetweenSights({ sights });
 
@@ -324,7 +326,8 @@ const Capture = forwardRef(({
 
   const windowDimensions = useWindowDimensions();
   const tourHasFinished = useMemo(
-    () => Object.values(uploads.state).every(({ status, uploadCount }) => (status === 'rejected' || status === 'fulfilled') && uploadCount >= 1),
+    () => Object.values(uploads.state)
+      .every(({ status, uploadCount }) => (status === 'rejected' || status === 'fulfilled') && uploadCount >= 1),
     [uploads.state],
   );
   const overlaySize = useMemo(

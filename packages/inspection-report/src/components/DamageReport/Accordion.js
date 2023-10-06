@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#fafafa',
     fontSize: 18,
-  }
+  },
 });
 
 function Accordion({ title, isCollapsed, children, onPress }) {
@@ -29,7 +29,7 @@ function Accordion({ title, isCollapsed, children, onPress }) {
           <Text style={styles.title}>{title}</Text>
           <IconButton
             icon={isCollapsed ? 'add' : 'remove'}
-            color='#fafafa'
+            color="#fafafa"
             onPress={onPress}
           />
         </View>
@@ -42,10 +42,10 @@ function Accordion({ title, isCollapsed, children, onPress }) {
 }
 
 Accordion.propTypes = {
-  title: PropTypes.string,
-  isCollapsed: PropTypes.bool,
   children: PropTypes.element,
+  isCollapsed: PropTypes.bool,
   onPress: PropTypes.func,
+  title: PropTypes.string,
 };
 
 Accordion.defaultProps = {

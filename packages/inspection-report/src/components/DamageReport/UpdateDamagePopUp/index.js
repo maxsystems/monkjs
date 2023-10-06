@@ -206,7 +206,7 @@ export default function UpdateDamagePopUp({
       <View style={[styles.content]}>
         <Text style={[styles.text, styles.title]}>{t(`damageReport.parts.${part}`)}</Text>
         !isDesktopMode && (
-            <ImageButton imageCount={imageCount} onPress={onShowGallery} />
+        <ImageButton imageCount={imageCount} onPress={onShowGallery} />
         )
       </View>
       <DamageManipulator
