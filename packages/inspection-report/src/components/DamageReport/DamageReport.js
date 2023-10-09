@@ -2,7 +2,7 @@ import { Loader } from '@monkvision/ui';
 import PropTypes from 'prop-types';
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 
 import { CommonPropTypes, DamageMode, VehicleType } from '../../resources';
 import { IconButton } from '../common';
@@ -106,7 +106,14 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   galleryWrapper: {
-    maxHeight: '39vh',
+    ...Platform.select({
+      web: {
+        maxHeight: '39vh',
+      },
+      native: {
+        maxHeight: '39%'
+      }
+    }),
     overflowY: 'auto',
   },
 });

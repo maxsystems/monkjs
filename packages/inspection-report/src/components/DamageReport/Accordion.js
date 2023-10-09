@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Platform } from 'react-native';
 import { IconButton } from '../common';
 
 const styles = StyleSheet.create({
@@ -13,7 +13,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: '10px',
+    ...Platform.select({
+      web: {
+        padding: '10px'
+      },
+      native: {
+        pospaddingition: 10
+      }
+    })
   },
   title: {
     color: '#fafafa',
