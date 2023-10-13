@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-<<<<<<< HEAD
-import { Modal, StyleSheet, View, Pressable, Text, ImageBackground, Platform, ScrollView } from 'react-native';
-=======
 import {
   Animated,
   Easing,
@@ -14,17 +11,13 @@ import {
   Text,
   useWindowDimensions,
   View,
+  ScrollView
 } from 'react-native';
->>>>>>> 6cb136ee57c0d388caae5b48bed21627df64caef
 import { MaterialIcons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 
 import Thumbnail from './Thumbnail';
-<<<<<<< HEAD
 import { useDesktopMode } from '../../hooks';
-=======
-import { useDesktopMode } from './../../hooks';
->>>>>>> 6cb136ee57c0d388caae5b48bed21627df64caef
 
 const styles = StyleSheet.create({
   container: {
@@ -231,7 +224,7 @@ function Gallery({ pictures }) {
       return (
         pictures.map((image, index) => (
           // eslint-disable-next-line react/no-array-index-key
-          <React.Fragment key={`${image.url}-${index}`}>
+          <View key={`${image.url}-${index}`} style={isDesktopMode && styles.partsImageWrapper}>
             <View style={styles.thumbnailWrapper}>
               <Thumbnail image={image} click={handleOnImageClick} />
             </View>
@@ -244,16 +237,16 @@ function Gallery({ pictures }) {
                 </View>
               ))
             }
-          </React.Fragment>
+          </View>
         ))
-      );
+      )
     }
     return (
       <ScrollView contentContainerStyle={{ flexDirection: 'row', flexWrap: 'wrap' }}>
         {
           pictures.map((image, index) => (
             // eslint-disable-next-line react/no-array-index-key
-            <React.Fragment key={`${image.url}-${index}`}>
+            <View key={`${image.url}-${index}`} style={isDesktopMode && styles.partsImageWrapper}>
               <View style={[styles.thumbnailWrapper, { width: image.width, flexDirection: 'row' }]}>
                 <Thumbnail image={image} click={handleOnImageClick} />
               </View>
@@ -276,32 +269,11 @@ function Gallery({ pictures }) {
   return (
     <View style={[
       styles.container,
-<<<<<<< HEAD
       isDesktopMode ? { justifyContent: 'flex-start' } : { justifyContent: 'center' },
       pictures.length === 0 ? styles.messageContainer : {},
     ]}
     >
       {pictures.length > 0 ? renderList() : (<Text style={[styles.message]}>{t('gallery.empty')}</Text>)}
-=======
-      pictures.length === 0 ? styles.messageContainer : {}
-    ]}>
-      {pictures.length > 0 ? pictures.map((image, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <View key={`${image.url}-${index}`} style={isDesktopMode && styles.partsImageWrapper}>
-          <View style={styles.thumbnailWrapper}>
-            <Thumbnail image={image} click={handleOnImageClick} />
-          </View>
-          {
-            isDesktopMode && image?.rendered_outputs && image?.rendered_outputs.length > 0 &&
-            image.rendered_outputs.map((innerImage, innerIndex) => (
-              <View style={styles.thumbnailWrapper} key={`${innerImage.url}-${innerIndex}`}>
-                <Thumbnail image={innerImage} click={handleOnImageClick} />
-              </View>
-            ))
-          }
-        </View>
-      )) : (<Text style={[styles.message]}>{t('gallery.empty')}</Text>)}
->>>>>>> 6cb136ee57c0d388caae5b48bed21627df64caef
       <Modal
         animationType="slide"
         transparent
