@@ -172,7 +172,7 @@ function Gallery({ pictures }) {
   }, [gestureState]);
 
   useEffect(() => {
-    if (focusedPhoto) {
+    if (focusedPhoto && Platform.OS === 'web') {
       const handleKeyboardChange = (event) => {
         if (event.defaultPrevented) {
           return; // Do nothing if the event was already processed
@@ -259,7 +259,7 @@ function Gallery({ pictures }) {
                   </View>
                 ))
               }
-            </React.Fragment>
+            </View>
           ))
         }
       </ScrollView>
